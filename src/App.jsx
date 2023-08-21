@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Scheduler } from "@aldabil/react-scheduler";
 import es from "date-fns/locale/es";
+import { Typography } from "@mui/material";
 
 function App() {
   const [events, setEvents] = useState([]);
@@ -62,7 +63,18 @@ function App() {
         onDelete={(eventId, eventStart) => handleDelete(eventId, eventStart)}
         view="month"
         navigation={true}
+        fields={[
+          {
+            name: "description",
+            type: "input",
+            config: { label: "description", required: false, multiline: true, rows: 4 },
+          },
+        ]}
+        resourceFields={{
+          name: "description",
+        }}
         locale={es}
+        dialogMaxWidth="lg"
         timeZone="GMT"
         translations={{
           navigation: {
@@ -79,13 +91,27 @@ function App() {
             cancel: "Cancelar",
           },
           event: {
-            title: "Descripción",
+            title: "Título",
             start: "Empieza",
             end: "Finaliza",
             allDay: "Todo el día",
           },
           moreEvents: "Más...",
           loading: "Cargando...",
+        }}
+        viewerExtraComponent={(fields, event) => {
+          return (
+            <div>
+              <p>Descripción: </p>
+              <Typography
+                key={event.event_id}
+                style={{ display: "flex", fontSize: "20px", alignItems: "center" }}
+                color="textSecondary"
+              >
+                {event.description}
+              </Typography>
+            </div>
+          );
         }}
       />
     </div>
